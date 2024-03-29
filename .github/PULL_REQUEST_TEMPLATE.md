@@ -1,40 +1,44 @@
 ### Type of Change
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] UI change/fix (doesn't break core functionality that changes how app looks)
-- [ ] New feature (non-breaking change which adds functionality)
+- [X] UI change/fix (doesn't break core functionality that changes how app looks)
+- [X] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] Code style update (formatting, renaming)
-- [ ] Refactoring (no functional changes, no API changes)
-- [ ] Build related changes
-- [ ] Documentation content changes
+- [X] Code style update (formatting, renaming)
+- [X] Refactoring (no functional changes, no API changes)
+- [X] Build related changes
+- [X] Documentation content changes
 
 ### Proposed Changes
 
-**What is the current behavior?**
-<Describe the current behavior of the feature/bug>
+**What is the current behavior?**  
+The project structure and file hierarchy have been restructured to improve organization and maintainability. Additionally, the project includes functionality for integrating with the Spotify Web API using OAuth 2.0 for user authentication and authorization.
 
-**What is the new behavior?**
-<Describe the new behavior after your changes>
+**What is the new behavior?**  
+The files and directories have been rearranged to have a clearer separation of concerns and to follow best practices for project structure. The project now includes features for:
+- Authenticating users with Spotify OAuth 2.0 and redirecting to the Spotify authentication page.
+- Fetching user playlists from the Spotify API.
+- Allowing users to name new playlists and redirecting them to the Spotify webpage showing the generated playlist.
 
-**If this PR introduces a breaking change, what changes might users need to make in their application due to this PR?**
-<Describe any breaking changes and potential impacts>
+**If this PR introduces a breaking change, what changes might users need to make in their application due to this PR?**  
+There are no breaking changes introduced by this PR. Users should not need to make any changes to their applications.
 
 ### Screenshots
+# Screenshot of the root directory showing various folders and files
+<img src="Signon.JPG" alt="Screenshot of the root directory showing various folders and files" title="Root Directory" width="500" height="500">
 
-**Before**
+# Screenshot of the Spotify login page with a user logging in.
+<img src="login.JPG" alt="Screenshot of the Spotify login page with a user logging in." title="Spotify Login Page" width="500" height="500">
 
-<Add screenshots if applicable>
+# Screenshot of a list of user's playlists displayed on the Spotify app.
+<img src="userPlaylists.JPG" alt="Screenshot of a list of user's playlists displayed on the Spotify app." title="User's Playlists" width="500" height="500">
 
-**After**
+# Screenshot showing the option to title a copy of a playlist on Spotify
+<img src="namePlaylist.JPG" alt="Screenshot showing the option to title a copy of a playlist on Spotify" title="Name Playlist" width="500" height="500">
 
-<Add screenshots if applicable>
+# Screenshot of the webpage displaying the newly created playlist on Spotify.
+<img src="generatedPlaylist-1.JPG" alt="Screenshot of the webpage displaying the newly created playlist on Spotify." title="Generated Playlist" width="500" height="500">
 
-### Other
-
-**pubspec.yaml Changes**
-
-<Describe any changes made to the pubspec.yaml file>
 
 **CI/CD Changes**
 
@@ -45,16 +49,15 @@
 <Describe any changes made to this pull request template>
 
 ### Comments/Questions from the Author
-
-<Add any comments or questions you have>
+N/A
 
 ### Self-Review Checklist
 
 - [ ] I have added unit and/or integration tests to cover my changes, or my changes did not require additional tests.
 - [ ] All new and existing tests passed on my local machine.
-- [ ] I did not add unnecessary comments to the code.
-- [ ] I did not add unnecessary logging or debugging code (print statements, for example).
-- [ ] Errors are properly handled for code that is risky.
-- [ ] Naming of methods, variables, and classes is proper.
-- [ ] I wrote a description of requested changes.
-- [ ] I performed a self-review of my own code.
+- [X] I did not add unnecessary comments to the code.
+- [X] I did not add unnecessary logging or debugging code (print statements, for example).
+- [X] Errors are properly handled for code that is risky.
+- [X] Naming of methods, variables, and classes is proper.
+- [X] I wrote a description of requested changes.
+- [X] I performed a self-review of my own code.
