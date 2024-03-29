@@ -18,7 +18,7 @@ router.get('/login', (req, res) => {
   const state = crypto.randomBytes(20).toString('hex'); // Generate random state value
   const scopes = 'playlist-read-private playlist-modify-private playlist-modify-public user-read-private user-read-email'; // Required scopes
   const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}&scope=${encodeURIComponent(scopes)}`;
-
+  
   res.redirect(authorizeUrl);
 });
 
