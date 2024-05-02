@@ -1,0 +1,59 @@
+<!-- index.html (Client-side) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RythmicLink</title>
+  <!-- Include MusicKit script -->
+  <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js" data-web-components async></script>
+</head>
+<body>
+  <h1>Welcome to RythmicLink</h1>
+  <!-- Buttons for authorization flows -->
+  <button id="spotifyBtn">Login to Spotify</button>
+  <button id="tidalBtn">Login to Tidal</button>
+  <button id="appleMusicBtn">Authorize with Apple Music</button>
+
+  <!-- Script to handle button clicks and configure MusicKit -->
+  <script>
+    document.getElementById('spotifyBtn').addEventListener('click', function() {
+      window.location.href = '/spotify/login';
+    });
+
+    document.getElementById('tidalBtn').addEventListener('click', function() {
+      window.location.href = '/tidal/login';
+    });
+
+    document.getElementById('appleMusicBtn').addEventListener('click', async function() {
+      try {                               
+        // Fetch the developer token from your config file
+        const response = await fetch('/workspaces/RythmicLink/Config/applemusicConfig.json');
+        console.log("Response : ", response, "\n");
+        if (!response.ok) {
+          throw new Error('Failed to fetch developer token');
+        }
+        const config = await response.json();
+        console.log("Config : ", config, "\n");
+        const developerToken = config.developerToken;
+        console.log("developerToken : ", developerToken, "\n");
+
+        // Initialize MusicKit with the received configuration
+        const musicKitInstance = window.MusicKit.configure({
+          developerToken: developerToken,
+          app: {
+            name: 'RythmicLink',
+            build: '1.0.0',
+          },
+        });
+
+        console.log('MusicKit configured successfully');
+      } catch (error) {
+        console.error('Error configuring MusicKit:', error);
+        alert('Error configuring MusicKit. Please try again later.');
+      }
+    });
+  </script>
+</body>
+</html>

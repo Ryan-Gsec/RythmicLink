@@ -3,7 +3,7 @@ import crypto from 'crypto';
 //import { authenticateSession } from '../MiddleWare/authMiddleware.js';
 import bodyParser from 'body-parser';
 import { exchangeCodeForToken, getUserProfile, getUserPlaylists, getPlaylistTracks, createPlaylist, addTracksToPlaylist } from '../Functions/spotifyFunctions.js'; // Import functions from separate file
-import { clientId, clientSecret, redirectUri } from '../Config/spotifyConfig.js'; // Import Spotify API credentials from config file
+import { spotifyclientId, spotifyclientSecret, spotifyredirectUri } from '../Config/spotifyConfig.js'; // Import Spotify API credentials from config file
 import { pool } from '../Database/database.js';
 
 const router = express.Router(); // Create a router object
@@ -17,13 +17,13 @@ router.get('/login', (req, res) => {
   // Redirect users to the Spotify authorization page
   const state = crypto.randomBytes(20).toString('hex'); // Generate random state value
   const scopes = 'playlist-read-private playlist-modify-private playlist-modify-public user-read-private user-read-email'; // Required scopes
-  const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}&scope=${encodeURIComponent(scopes)}`;
+  const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${spotifyclientId}&response_type=code&redirect_uri=${encodeURIComponent(spotifyredirectUri)}&state=${state}&scope=${encodeURIComponent(scopes)}`;
   
   res.redirect(authorizeUrl);
 });
 
 // Function for handling callback from Spotify
-export const callbackHandler = async (req, res) => {
+export const spotifycallbackHandler = async (req, res) => {
   const { code, state } = req.query;
 
   // Validate state parameter to prevent CSRF attacks

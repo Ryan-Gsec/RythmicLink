@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { clientId, clientSecret, redirectUri } from '../Config/spotifyConfig.js';
+import { spotifyclientId, spotifyclientSecret, spotifyredirectUri } from '../Config/spotifyConfig.js';
 
 // Function to exchange authorization code for access token
 export async function exchangeCodeForToken(code) {
@@ -7,9 +7,9 @@ export async function exchangeCodeForToken(code) {
   const requestBody = new URLSearchParams({
     grant_type: 'authorization_code',
     code: code,
-    redirect_uri: redirectUri,
-    client_id: clientId,
-    client_secret: clientSecret,
+    redirect_uri: spotifyredirectUri,
+    client_id: spotifyclientId,
+    client_secret: spotifyclientSecret,
   });
 
   try {
