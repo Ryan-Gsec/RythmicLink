@@ -6,11 +6,10 @@ import spotifyRoutes from './Routes/spotifyRoutes.js';
 import tidalRoutes from './Routes/tidalRoutes.js'
 import { spotifycallbackHandler } from './Routes/spotifyRoutes.js';
 import { tidalcallbackHandler } from './Routes/tidalRoutes.js';
-
-import appleMusicRoutes from './Routes/applemusicRoutes.js';
-
+import  appleMusicRoutes  from './Routes/applemusicRoutes.js';
 
 
+//initialize express application
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,23 +17,24 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Mount the Spotify and Tidal routes
+// Mount platform Routes, prefixed "/platform/{route}"
 app.use('/spotify', spotifyRoutes);
 app.use('/tidal', tidalRoutes);
-app.use('/applemusic', appleMusicRoutes);
+app.use('/apple', appleMusicRoutes);
 
-// Serve static files from the 'public' directory
+// Set static file to caputre button selection
 app.use(express.static(path.join(new URL('public', import.meta.url).pathname)));
 
-// Define the root route to serve the main HTML page
+// send response of server, i.e correct button click follows correct route
 app.get('/', (req, res) => {
-  // Serve the main HTML page
+  // Serve the main HTML page, button and style defined in index.html with seperate stylesheet
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Define the callback route to dynamically call the correct callback handler based on the platform
-app.get('/callback', spotifycallbackHandler)
+// Callback handler not wrapped in /platform, exported seperately
+app.get('/callback', spotifycallbackHandler);
 app.get('/callback', tidalcallbackHandler);
+
 
 // Start the server
 app.listen(PORT, () => {

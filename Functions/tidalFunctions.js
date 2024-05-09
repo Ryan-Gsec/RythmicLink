@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import TidalAPI from "tidal-api-wrapper"
 import { tidalclientId, tidalclientSecret, tidalredirectUri } from '../Config/tidalConfig.js';
 
 // Function to exchange authorization code for access token
@@ -52,7 +53,7 @@ export async function getUserPlaylists(accessToken, userId) {
         if (!response.ok) {
             throw new Error('1Failed to retrieve playlists');
         }
-
+        
         const playlistsData = await response.json();
         return playlistsData;
     } catch (error) {

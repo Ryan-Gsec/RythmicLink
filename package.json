@@ -17,6 +17,9 @@
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "tidal-api-wrapper": "^1.7.1",
+    "tidalapi": "^0.2.3",
+    "tidalapi-ts": "^2.1.2"
   }
 }
