@@ -81,7 +81,29 @@ export async function getUserPlaylists(accessToken, userId) {
   }
 }
 
+// Function to retrieve playlist images
+export async function getPlaylistImages(accessToken, playlistId) {
+  const imagesEndpoint = `https://api.spotify.com/v1/playlists/${playlistId}/images`;
 
+  try {
+    const response = await fetch(imagesEndpoint, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to retrieve playlist images');
+    }
+
+    const data = await response.json();
+    return data; // Return an array of image objects
+  } catch (error) {
+    console.error('Error retrieving playlist images:', error.message);
+    throw error;
+  }
+}
 
 // Function to retrieve tracks of the selected playlist
 export async function getPlaylistTracks(accessToken, playlistId) {

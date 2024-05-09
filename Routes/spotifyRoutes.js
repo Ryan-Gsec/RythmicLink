@@ -2,7 +2,7 @@ import express from 'express';
 import crypto from 'crypto';
 //import { authenticateSession } from '../MiddleWare/authMiddleware.js';
 import bodyParser from 'body-parser';
-import { exchangeCodeForToken, getUserProfile, getUserPlaylists, getPlaylistTracks, createPlaylist, addTracksToPlaylist } from '../Functions/spotifyFunctions.js'; // Import functions from separate file
+import { exchangeCodeForToken, getUserProfile, getUserPlaylists, getPlaylistTracks, createPlaylist, addTracksToPlaylist, getPlaylistImages } from '../Functions/spotifyFunctions.js'; // Import functions from separate file
 import { spotifyclientId, spotifyclientSecret, spotifyredirectUri } from '../Config/spotifyConfig.js'; // Import Spotify API credentials from config file
 import { pool } from '../Database/database.js';
 
@@ -24,16 +24,11 @@ router.get('/login', (req, res) => {
 
 // Function for handling callback from Spotify
 export const spotifycallbackHandler = async (req, res) => {
-  const { code, state } = req.query;
-
-  // Validate state parameter to prevent CSRF attacks
-  // Add your state validation logic here if needed
-
+  const {code} = req.query;
   // Exchange authorization code for access token
   try {
     const accessToken = await exchangeCodeForToken(code);
-
-    // Retrieve user profile information to get the user ID
+    //Get user profile data, from defined function assign to userId
     const userProfile = await getUserProfile(accessToken);
     const userId = userProfile.id;
 
@@ -53,23 +48,39 @@ router.get('/playlists', async (req, res) => {
 
     // Retrieve the user's playlists from Spotify API
     const playlists = await getUserPlaylists(accessToken, userId);
-
     // Render the playlists in an HTML format
-    let html = '<h1>User Playlists</h1>';
-    html += '<ul>';
+    let html = `
+    <html>
+    <head>
+      <title>User Playlists</title>
+
+      <link rel="stylesheet" type="text/css" href="/style.css">
+    </head>
+    <body>
+      <h1>User Playlists</h1>
+      <ul>
+    `;
     playlists.forEach(playlist => {
       const playlistLink = `/spotify/createPlaylist?access_token=${accessToken}&user_id=${userId}&playlist_id=${playlist.id}`;
-      html += `<li>${playlist.name} by ${playlist.owner.display_name} (${playlist.tracks.total} tracks) - <a href="${playlistLink}">Create Public Playlist</a></li>`;
+      // Check if playlist.images is not null and not empty
+      if (playlist.images && playlist.images.length > 0) {
+        const playlistImageUrl = playlist.images[0].url;
+        html += `<li class="playlist-entry"><img src="${playlistImageUrl}" alt="Playlist Image"> <div><strong>${playlist.name}</strong> (${playlist.tracks.total} tracks) - <a href="${playlistLink}">Create Public Playlist</a></div></li>`;
+      } else {
+        html += `<li class="playlist-entry"><strong>${playlist.name}</strong> by ${playlist.owner.display_name} (${playlist.tracks.total} tracks) - <a href="${playlistLink}">Create Public Playlist</a></li>`;
+      }
     });
-    html += '</ul>';
-
+    html += `
+          </ul>
+        </body>
+      </html>
+    `;
     res.send(html);
   } catch (error) {
-    console.error('Error fetching user playlists:', error.message);
-    res.status(500).send('Failed to fetch user playlists');
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
-
 
 // Route for creating a public playlist from the selected playlist
 router.get('/createPlaylist', async (req, res) => {
@@ -94,7 +105,7 @@ router.get('/createPlaylist', async (req, res) => {
         <button type="submit">Create Public Playlist</button>
       </form>
     `;
-
+    console.log(form);
     res.send(form);
   } catch (error) {
     console.error('Error creating public playlist:', error.message);

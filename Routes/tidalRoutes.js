@@ -1,8 +1,9 @@
 import express from 'express';
 import crypto from 'crypto';
+import Tidal from 'tidal-api-wrapper'
 import { tidalclientId, tidalredirectUri } from "../Config/tidalConfig.js";
 import { exchangeCodeForToken, getUserPlaylists } from '../Functions/tidalFunctions.js';
-
+const tidal = new Tidal();
 const router = express.Router();
 let codeVerifierex; 
 router.get('/login', (req, res) => {
@@ -71,6 +72,28 @@ router.get('/playlists', async (req, res) => {
     }
   });
 
+  router.get('/sign-in', async (req, res) => {
+    try{
+      const user = await tidal.login('ryan.p.gonzales01@utrgv.edu', 'Rpg070998_')
+      const playlists = await tidal.getPlaylists();
+      let htmlResponse = "<h2>Your Playlists</h2><ul>";
+      playlists.forEach(playlist => {
+        if(playlist.publicPlaylist == true)
+          {
+            const playlistLink = playlist.url;
+            htmlResponse += `<li><strong>${playlist.name}</strong> (${playlist.numberOfTracks} tracks)- <a href="${playlistLink}">Create Public Playlist</a></li>`;
+          }
+        });
+        htmlResponse += `
+          </ul>
+        </body>
+      </html>
+    `;
+    }catch (error) {
+      console.error("Error during sign-in:", error);
+      res.status(500).send("Error during sign-in");
+  }
+});
 
 // Function to encode bytes to base64 URL encoding
 function base64URLEncode(buffer) {
